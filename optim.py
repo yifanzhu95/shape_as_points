@@ -185,7 +185,6 @@ def main():
         points = torch.from_numpy(points).unsqueeze(0).to(device)
         normals = torch.from_numpy(normals).unsqueeze(0).to(device)
 
-    
     points = torch.log(points/(1-points)) # inverse sigmoid
     inputs = torch.cat([points, normals], axis=-1).float()
     inputs.requires_grad = True

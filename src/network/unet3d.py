@@ -7,8 +7,11 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 from functools import partial
-from src.network.utils import get_embedder
-
+try:
+    from src.network.utils import get_embedder
+except:
+    from diffworld.shape_as_points.src.network.utils import get_embedder
+    
 def number_of_features_per_level(init_channel_number, num_levels):
     return [init_channel_number * 2 ** k for k in range(num_levels)]
 

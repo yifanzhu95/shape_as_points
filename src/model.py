@@ -1,23 +1,27 @@
 import torch
 import numpy as np
 import time
-from src.utils import point_rasterize, grid_interp, mc_from_psr, \
-calc_inters_points
-from src.dpsr import DPSR
+try:
+    from src.utils import point_rasterize, grid_interp, mc_from_psr, calc_inters_points
+    from src.dpsr import DPSR
+    from src.network import encoder_dict, decoder_dict
+    from src.network.utils import map2local
+except:
+    from diffworld.shape_as_points.src.utils import point_rasterize, grid_interp, mc_from_psr, calc_inters_points
+    from diffworld.shape_as_points.src.dpsr import DPSR
+    from diffworld.shape_as_points.src.network import encoder_dict, decoder_dict
+    from diffworld.shape_as_points.src.network.utils import map2local
 import torch.nn as nn
-from src.network import encoder_dict, decoder_dict
-from src.network.utils import map2local
-
 class PSR2Mesh(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, psr_grid):
+    def forward(ctx, psr_grid, step_size):
         """
         In the forward pass we receive a Tensor containing the input and return
         a Tensor containing the output. ctx is a context object that can be used
         to stash information for backward computation. You can cache arbitrary
         objects for use in the backward pass using the ctx.save_for_backward method.
         """
-        verts, faces, normals = mc_from_psr(psr_grid, pytorchify=True)
+        verts, faces, normals = mc_from_psr(psr_grid, pytorchify=True, step_size=step_size)
         verts = verts.unsqueeze(0)
         faces = faces.unsqueeze(0)
         normals = normals.unsqueeze(0)

@@ -64,6 +64,9 @@ def main():
                                            args.object_id)
         print(cmd)
         os.system(cmd)
+        
+        ## Debugging
+        #exit()
 
 if __name__=="__main__":
     main()

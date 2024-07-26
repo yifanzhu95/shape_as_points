@@ -242,18 +242,21 @@ def load_model_manual(state_dict, model):
 
     model.load_state_dict(new_state_dict)
 
-def mc_from_psr(psr_grid, pytorchify=False, real_scale=False, zero_level=0):
+def mc_from_psr(psr_grid, pytorchify=False, real_scale=False, zero_level=0, step_size = 1):
     '''
     Run marching cubes from PSR grid
     '''
     batch_size = psr_grid.shape[0]
     s = psr_grid.shape[-1] # size of psr_grid
     psr_grid_numpy = psr_grid.squeeze().detach().cpu().numpy()
-    
+    # from icecream import ic
+    # ic(np.max(psr_grid_numpy, axis = 0), np.min(psr_grid_numpy, axis = 0))
+
     if batch_size>1:
         verts, faces, normals = [], [], []
         for i in range(batch_size):
-            verts_cur, faces_cur, normals_cur, values = measure.marching_cubes(psr_grid_numpy[i], level=0)
+            verts_cur, faces_cur, normals_cur, values = measure.marching_cubes(psr_grid_numpy[i], level=0, \
+                                                        step_size=step_size)
             verts.append(verts_cur)
             faces.append(faces_cur)
             normals.append(normals_cur)
@@ -262,9 +265,9 @@ def mc_from_psr(psr_grid, pytorchify=False, real_scale=False, zero_level=0):
         normals = np.stack(normals, axis = 0)
     else:
         try:
-            verts, faces, normals, values = measure.marching_cubes(psr_grid_numpy, level=zero_level)
+            verts, faces, normals, values = measure.marching_cubes(psr_grid_numpy, level=zero_level,step_size=step_size)
         except:
-            verts, faces, normals, values = measure.marching_cubes(psr_grid_numpy)
+            verts, faces, normals, values = measure.marching_cubes(psr_grid_numpy,step_size=step_size)
     if real_scale:
         verts = verts / (s-1) # scale to range [0, 1]
     else:
@@ -612,9 +615,7 @@ class GaussianSmoothing(nn.Module):
     
 # Originally from https://github.com/amosgropp/IGR/blob/0db06b1273/code/utils/general.py
 def get_learning_rate_schedules(schedule_specs):
-
     schedules = []
-
     for key in schedule_specs.keys():
         schedules.append(StepLearningRateSchedule(
                 schedule_specs[key]['initial'],

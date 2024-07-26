@@ -3,8 +3,12 @@ import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
 from ipdb import set_trace as st
-from src.network.utils import normalize_3d_coordinate, ResnetBlockFC, \
-    normalize_coordinate
+try:
+    from src.network.utils import normalize_3d_coordinate, ResnetBlockFC, \
+        normalize_coordinate
+except:
+    from diffworld.shape_as_points.src.network.utils import normalize_3d_coordinate, ResnetBlockFC, \
+        normalize_coordinate
 
 
 class LocalDecoder(nn.Module):

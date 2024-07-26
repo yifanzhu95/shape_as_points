@@ -71,9 +71,22 @@ class Trainer(object):
         
         # source oriented point clouds to PSR grid
         psr_grid, points, normals = self.pcl2psr(inputs)
-        
+        from icecream import ic
+        # ic(psr_grid.shape)
+        # print('------------')
+        # print(psr_grid.shape)
+        # ic(torch.max(points.squeeze(0), axis = 0), torch.min(points.squeeze(0), axis=0))
+        # ic(torch.max(psr_grid), torch.min(psr_grid))
+        # for i in range(psr_grid.size(-1)):
+        #     print(i, psr_grid[:,:,64,64,i])
+        # exit()
         # build mesh
         v, f, n = self.psr2mesh(psr_grid)
+        ic(v)
+        ic(f, f.shape)
+        ic(n)
+
+        exit()
         
         # the output is in the range of [0, 1), we make it to the real range [0, 1]. 
         # This is a hack for our DPSR solver

@@ -1,12 +1,18 @@
 import torch
 import torch.nn as nn
 import numpy as np
-from src.network.unet3d import UNet3D
-from src.network.unet import UNet
+try:
+    from src.network.unet3d import UNet3D
+    from src.network.unet import UNet
+    from src.network.utils import get_embedder, normalize_3d_coordinate,\
+    coordinate2index, ResnetBlockFC, normalize_coordinate
+except:
+    from diffworld.shape_as_points.src.network.unet3d import UNet3D
+    from diffworld.shape_as_points.src.network.unet import UNet
+    from diffworld.shape_as_points.src.network.utils import get_embedder, normalize_3d_coordinate,\
+    coordinate2index, ResnetBlockFC, normalize_coordinate
 from ipdb import set_trace as st
 from torch_scatter import scatter_mean, scatter_max
-from src.network.utils import get_embedder, normalize_3d_coordinate,\
-coordinate2index, ResnetBlockFC, normalize_coordinate
 
 class LocalPoolPointnet(nn.Module):
     ''' PointNet-based encoder network with ResNet blocks for each point.
