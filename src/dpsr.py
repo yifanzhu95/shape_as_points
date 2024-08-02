@@ -52,10 +52,6 @@ class DPSR(nn.Module):
         Phi = Phi.permute(*tuple([[self.dim+1] + list(range(self.dim+1))]))  # [b, dim0, dim1, dim2/2+1, 2]
         
         phi = torch.fft.irfftn(torch.view_as_complex(Phi), s=self.res, dim=(1,2,3))
-        # from icecream import ic
-        # ic(self.shift, self.scale)
-        # self.shift = False
-        # self.scale = False
         if self.shift or self.scale:
             # ensure values at points are zero
             fv = grid_interp(phi.unsqueeze(-1), V, batched=True).squeeze(-1) # [b, nv]

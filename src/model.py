@@ -45,7 +45,7 @@ class PSR2Mesh(torch.autograd.Function):
         grad_vert = torch.matmul(dL_dVertex.permute(1, 0, 2), -normals.permute(1, 2, 0))
         grad_grid = point_rasterize(vert_pts, grad_vert.permute(1, 0, 2), res) # b x 1 x res x res x res
         
-        return grad_grid
+        return grad_grid, None
 
 class PSR2SurfacePoints(torch.autograd.Function):
     @staticmethod
