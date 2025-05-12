@@ -1,16 +1,16 @@
 import torch
 import numpy as np
 import time
-try:
-    from src.utils import point_rasterize, grid_interp, mc_from_psr, calc_inters_points
-    from src.dpsr import DPSR
-    from src.network import encoder_dict, decoder_dict
-    from src.network.utils import map2local
-except:
-    from diffworld.shape_as_points.src.utils import point_rasterize, grid_interp, mc_from_psr, calc_inters_points
-    from diffworld.shape_as_points.src.dpsr import DPSR
-    from diffworld.shape_as_points.src.network import encoder_dict, decoder_dict
-    from diffworld.shape_as_points.src.network.utils import map2local
+# try:
+#     from src.utils import point_rasterize, grid_interp, mc_from_psr, calc_inters_points
+#     from src.dpsr import DPSR
+#     from src.network import encoder_dict, decoder_dict
+#     from src.network.utils import map2local
+# except:
+from diffworld.shape_as_points.src.utils import point_rasterize, grid_interp, mc_from_psr, calc_inters_points
+from diffworld.shape_as_points.src.dpsr import DPSR
+from diffworld.shape_as_points.src.network import encoder_dict, decoder_dict
+from diffworld.shape_as_points.src.network.utils import map2local
 import torch.nn as nn
 class PSR2Mesh(torch.autograd.Function):
     @staticmethod
